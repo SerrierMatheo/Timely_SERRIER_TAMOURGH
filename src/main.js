@@ -19,12 +19,15 @@ const pinia = createPinia()
 app.use(pinia)
 pinia.use(piniaPersist)
 
+import { useAuthStore } from "@/stores/authStore.js";
+const authStore = useAuthStore()
+
 app.use(router)
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         // Check if user is authenticated, redirect to login if not
-        if (!app.apiKey) {
+        if (!authStore.apikey) {
             next({
                 path: '/connexion',
                 query: { redirect: to.fullPath },
