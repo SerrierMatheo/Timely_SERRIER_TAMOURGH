@@ -12,6 +12,6 @@ export default {
   <main>
     <h2>S'inscrire</h2>
     <Register/>
-    <RouterLink to="/connexion">Déja un compte? Se connecter.</RouterLink>
+    <RouterLink to="/auth/login">Déja un compte? Se connecter.</RouterLink>
   </main>
 </template>

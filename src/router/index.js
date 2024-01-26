@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ProfilView from '../views/ProfilView.vue'
 import ActiviteView from '../views/ActiviteView.vue'
-import ConnexionView from '@/views/ConnexionView.vue'
-import InscriptionView from '@/views/InscriptionView.vue'
+import ConnexionView from '../views/ConnexionView.vue'
+import InscriptionView from '../views/InscriptionView.vue'
+import AuthView from "../views/AuthView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,15 +34,22 @@ const router = createRouter({
       }
     },
     {
-      path: '/connexion',
-      name: 'connexion',
-      component: ConnexionView
+      path: '/auth',
+      name: 'auth',
+      component: AuthView,
+      children: [
+        {
+          path: 'login',
+          name: 'auth/login',
+          component: ConnexionView,
+        },
+        {
+          path: 'register',
+          name: 'auth/register',
+          component: InscriptionView,
+        },
+      ],
     },
-    {
-      path: '/inscription',
-      name: 'inscription',
-      component: InscriptionView
-    }
   ]
 })
 
