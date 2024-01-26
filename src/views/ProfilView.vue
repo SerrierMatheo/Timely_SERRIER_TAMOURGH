@@ -1,11 +1,11 @@
 <script>
-import { useAuthStore } from "@/stores/authStore.js";
-const authStore = useAuthStore()
+
+import {useAuthStore} from "@/stores/authStore.js";
 
 export default {
   data() {
     return {
-      key: authStore.apikey
+      key: useAuthStore().apikey
     }
   }
 }

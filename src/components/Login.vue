@@ -9,6 +9,7 @@
 <script>
 import {useAuthStore} from "@/stores/authStore.js";
 import {mapState, mapActions} from "pinia";
+import router from "@/router/index.js";
 
 export default {
   data() {
@@ -22,12 +23,22 @@ export default {
   methods: {
     ...mapActions(useAuthStore, ["setApikey"]),
     submitForm() {
-      this.$api.get('api/profile').then((response) => {
+      console.log(this.apikey);
+
+      const config = {
+        headers: {
+          Authorization: `key=${this.key}`
+        }
+      };
+
+      this.$api.get('api/profile', config).then((response) => {
         if(response.status === 200) {
           this.setApikey(this.key)
+
+          router.push('/')
         }
       }).catch((error) => {
-        window.alert("apikey invalide : ")
+        window.alert("apikey invalide : " + this.key)
       })
     }
   }
