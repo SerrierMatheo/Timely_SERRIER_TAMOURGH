@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <main>
+  <main class="day-text">
     <h2>S'inscrire</h2>
     <Register/>
     <RouterLink to="/auth/login">Déja un compte? Se connecter.</RouterLink>

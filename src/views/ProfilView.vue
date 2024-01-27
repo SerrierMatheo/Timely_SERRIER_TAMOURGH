@@ -12,8 +12,8 @@ export default {
 </script>
 
 <template>
-    <h2>Profil</h2>
-    <h3>Mon token : {{ this.key }}</h3>
+    <h2 class="day-text">Profil</h2>
+    <h3 class="day-text">Mon token : {{ this.key }}</h3>
 </template>
 
 <style scoped>

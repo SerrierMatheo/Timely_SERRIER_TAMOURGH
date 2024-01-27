@@ -3,6 +3,8 @@
 
 <template>
   <main>
-    <h2>Welcome on timely</h2>
+    
+    <h2 class="day-text">Welcome on timely</h2>
+  
   </main>
 </template>
