@@ -5,6 +5,7 @@ import ActiviteView from '../views/ActiviteView.vue'
 import ConnexionView from '../views/ConnexionView.vue'
 import InscriptionView from '../views/InscriptionView.vue'
 import AuthView from "../views/AuthView.vue";
+import LogoutVue from '../components/Logout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,7 @@ const router = createRouter({
         requiresAuth: true
       }
     },
+    
     {
       path: '/auth',
       name: 'auth',
@@ -42,6 +44,11 @@ const router = createRouter({
           path: 'login',
           name: 'auth/login',
           component: ConnexionView,
+        },
+        {
+          path: 'logout',
+          name: 'logout',
+          component: LogoutVue,
         },
         {
           path: 'register',

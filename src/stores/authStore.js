@@ -9,7 +9,10 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         setApikey(apikey) {
             this.apikey = apikey;
-        }
+        },
+        removeApikey() {
+            this.apikey = null;
+          },
     },
     persist: {
         enabled: true,
