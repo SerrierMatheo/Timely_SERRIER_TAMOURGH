@@ -18,6 +18,6 @@ export default {
   <h3>Voulez-vous vraiment vous déconnecter?</h3>
   </div>
   <div class="form">
-  <button @click="logout" class="btn"><span class="text">Deconnexion</span></button>
+  <input @click="logout" value="Deconnexion" class="btn" type="submit">
   </div>
 </template>
