@@ -19,7 +19,7 @@
   }
   .side {
     grid-area: sidebar;
-    background-color:rgb(249, 249, 249);
+    
     color: black;
     width: 100%;
     display: flex;
@@ -27,6 +27,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  header{
+    background-color:rgb(249, 249, 249); 
     border-radius:10px 0 0 10px;
   }
   
