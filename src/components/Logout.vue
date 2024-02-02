@@ -14,8 +14,10 @@ export default {
 </script>
 
 <template>
-  <div class="itm"> 
+  <div class="form"> 
   <h3>Voulez-vous vraiment vous déconnecter?</h3>
+  </div>
+  <div class="form">
   <button @click="logout" class="btn"><span class="text">Deconnexion</span></button>
   </div>
 </template>
