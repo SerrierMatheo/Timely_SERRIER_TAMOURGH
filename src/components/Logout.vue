@@ -1,23 +1,18 @@
 <script>
-import { ref } from 'vue';
-import router from '@/router/index.js';
-import {mapState, mapActions} from "pinia";
-import {useAuthStore} from "@/stores/authStore.js";
-
-const apikey = ref('');
-
-const logout = () => {
-  this.$api.delete('api/profile', {
-        name: null,
-        email: null
-      })
-  localStorage.removeItem('apikey'); // (Optionnel) Supprimer du stockage local
-  router.push('/'); // Redirection vers l'accueil après déconnexion
-};
+import { useAuthStore } from '@/stores/authStore.js';
 
 export default {
   methods: {
-    logout,
-  },
-};
+    logout() {
+      const authStore = useAuthStore();
+      authStore.removeApikey();
+      // Redirection facultative vers une autre route après la déconnexion
+      this.$router.push('/');
+    }
+  }
+}
 </script>
+
+<template>
+  <button @click="logout">Déconnexion</button>
+</template>
