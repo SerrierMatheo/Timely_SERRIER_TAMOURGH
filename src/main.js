@@ -12,7 +12,7 @@ const app = createApp(App)
 
 app.use(ApiPlugins, {
     baseURL: 'https://timely.edu.netlor.fr/',
-    apiKey: '@+8)T$i#v]4H'
+    apiKey: ''
 })
 
 const pinia = createPinia()
@@ -26,17 +26,16 @@ app.use(router)
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
-        // Check if user is authenticated, redirect to login if not
         if (!authStore.apikey) {
             next({
-                path: '/connexion',
+                path: '/auth/login',
                 query: { redirect: to.fullPath },
             });
         } else {
             next();
         }
     } else {
-        next(); // Allow access to non-restricted routes
+        next();
     }
 });
 

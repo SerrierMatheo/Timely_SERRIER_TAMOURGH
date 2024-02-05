@@ -3,6 +3,6 @@
 
 <template>
   <main>
-    <h2>Activite</h2>
+    <h2 class="day-text">Activite</h2>
   </main>
 </template>

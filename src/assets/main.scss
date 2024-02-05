@@ -1,0 +1,73 @@
+@import url(_nav.scss);
+
+html{
+    background-color: black;
+    background: linear-gradient(to right, rgb(68, 7, 198), rgb(106, 48, 120));
+}
+
+
+  
+  .wrapper {
+    padding-top: 18vh;
+    max-width: 1024px;
+    margin: 0 auto;
+    color: white;
+    justify-content:center;
+    align-items:normal;
+    border-radius: 10px;
+    
+    font:
+      1.2em Helvetica,
+      arial,
+      sans-serif;
+  }
+  
+
+
+.card {
+    height: 150px;
+    background: rgb(34, 33, 33);
+    border-radius: 15px;
+    display: flex;
+    color: white;
+    justify-content:center;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+  }
+  
+  .time-text {
+    font-size: 50px;
+    margin-top: 0px;
+    margin-left: 15px;
+    font-weight: 600;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  
+  .time-sub-text {
+    font-size: 15px;
+    margin-left: 5px;
+  }
+  
+  .day-text {
+    font-size: 18px;
+    margin-top: 0px;
+    margin-left: 15px;
+    font-weight: 500;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  
+  .moon {
+    font-size: 20px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .card:hover > .moon {
+    font-size: 23px;
+  }
