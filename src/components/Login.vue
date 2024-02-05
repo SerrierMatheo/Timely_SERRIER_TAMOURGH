@@ -1,7 +1,9 @@
 <template>
-    <form @submit.prevent="submitForm" class="register wrap">
-      <div class="h1">Connexion</div>
-      <input placeholder="Key" v-model="key" id="key" name="key" type="text" required>
+    <form @submit.prevent="submitForm" class="form">
+      <div class="h1" id="heading">Connectez-vous</div>
+      <div class="field">
+        <input placeholder="Key" class="input-field" v-model="key" id="key" name="key" type="text" required >
+      </div>
       <input value="Connexion" class="btn" type="submit">
     </form>
   </template>

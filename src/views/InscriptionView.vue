@@ -10,8 +10,9 @@ export default {
 
 <template>
   <main class="day-text">
-    <h2>S'inscrire</h2>
     <Register/>
-    <RouterLink to="/auth/login">Déja un compte? Se connecter.</RouterLink>
+    <div class="link">
+    <RouterLink to="/auth/login" class="link">Déja un compte? Se connecter.</RouterLink>
+  </div>
   </main>
 </template>
