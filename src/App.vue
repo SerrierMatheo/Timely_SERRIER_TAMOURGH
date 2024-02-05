@@ -13,7 +13,7 @@ import router from '@/router/index.js';
           <RouterLink to="/"><img src="./assets/icone.png" style="width: 100px;height: auto;"></RouterLink>
           <RouterLink to="/Profil">Profil</RouterLink>
           <RouterLink to="/Activite">Activite</RouterLink>
-          <router-link to="/"><div class="deco">Déconnexion</div></router-link>
+          <router-link to="/logout"><div class="deco">Déconnexion</div></router-link>
         </nav>
     </header>
 

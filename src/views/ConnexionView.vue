@@ -10,8 +10,7 @@ export default {
 
 <template>
   <main class="day-text">
-    <h2>Connexion</h2>
     <Login/>
-    <RouterLink to="/auth/register">Pas de compte? S'inscrire.</RouterLink>
+    <RouterLink to="/auth/register" class="input-field">Pas de compte? S'inscrire.</RouterLink>
   </main>
 </template>
