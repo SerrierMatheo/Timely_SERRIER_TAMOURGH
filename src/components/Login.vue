@@ -35,6 +35,9 @@ export default {
         if (response.status === 200) {
           this.setApikey(this.key);
           await router.push("/");
+          this.$toast.success('Connexion réussie');
+        } else {
+          this.$toast.error('Identifiant invalide');
         }
       } catch (error) {
         window.alert("apikey invalide : " + this.key);

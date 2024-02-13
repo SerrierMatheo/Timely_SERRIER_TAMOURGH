@@ -8,6 +8,9 @@ import App from './App.vue'
 import ApiPlugins from './plugins/api.js'
 import router from './router/index.js'
 
+import toast from './plugins/toast'
+import 'vue3-toastify/dist/index.css'
+
 const app = createApp(App)
 
 const pinia = createPinia()
@@ -21,6 +24,8 @@ app.use(ApiPlugins, {
     baseURL: 'https://timely.edu.netlor.fr/',
     apiKey: authStore.apikey
 })
+
+app.use(toast)
 
 app.use(router)
 
