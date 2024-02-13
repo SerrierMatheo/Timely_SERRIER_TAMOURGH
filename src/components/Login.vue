@@ -34,8 +34,10 @@ export default {
 
         if (response.status === 200) {
           this.setApikey(this.key);
+          console.log(response.data.name);
           await router.push("/");
           this.$toast.success('Connexion réussie');
+          console.log(useAuthStore().apikey);
         } else {
           this.$toast.error('Identifiant invalide');
         }

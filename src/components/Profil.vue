@@ -1,34 +1,3 @@
-<template>
-  <div class="profile-view">
-    <div class="profile-menu">
-      <ul>
-        <li @click="changeOption('viewProfile')">Mes informations</li>
-        <li @click="changeOption('editProfile')">Modifier le profil</li>
-      </ul>
-    </div>
-
-    <div class="profile-content">
-      <h2 class="day-text">Profil</h2>
-      <div v-if="selectedOption === 'viewProfile'">
-        <h3 class="day-text">Mon token : {{ key }}</h3>
-        <p>Nom complet : {{ profileInfo.name }}</p>
-        <p>Adresse email : {{ profileInfo.email }}</p>
-      </div>
-      <div v-else-if="selectedOption === 'editProfile'">
-        <form @submit.prevent="submitForm">
-          <label for="name">Nom complet:</label>
-          <input type="text" id="name" v-model="name" required />
-
-          <label for="email">Adresse email:</label>
-          <input type="email" id="email" v-model="email" required />
-
-          <button type="submit">Enregistrer</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import { useAuthStore } from "@/stores/authStore.js";
 
@@ -79,6 +48,39 @@ export default {
   }
 };
 </script>
+
+<template>
+  <div class="profile-view">
+    <div class="profile-menu">
+      <ul>
+        <li @click="changeOption('viewProfile')">Mes informations</li>
+        <li @click="changeOption('editProfile')">Modifier le profil</li>
+      </ul>
+    </div>
+
+    <div class="profile-content">
+      <h2 class="day-text">Profil</h2>
+      <div v-if="selectedOption === 'viewProfile'">
+        <h3 class="day-text">Mon token : {{ key }}</h3>
+        <p>Nom complet : {{ profileInfo.name }}</p>
+        <p>Adresse email : {{ profileInfo.email }}</p>
+      </div>
+      <div v-else-if="selectedOption === 'editProfile'">
+        <form @submit.prevent="submitForm">
+          <label for="name">Nom complet:</label>
+          <input type="text" id="name" v-model="name" required />
+
+          <label for="email">Adresse email:</label>
+          <input type="email" id="email" v-model="email" required />
+
+          <button type="submit">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+
 
 <style scoped>
 .profile-view {
