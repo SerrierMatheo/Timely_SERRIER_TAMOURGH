@@ -5,6 +5,7 @@ import ConnexionView from '../views/ConnexionView.vue'
 import InscriptionView from '../views/InscriptionView.vue'
 import AuthView from "../views/AuthView.vue";
 import LogoutVue from '../components/Logout.vue'
+import StatistiquesView from "@/views/StatistiquesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,14 @@ const router = createRouter({
       path: '/params',
       name: 'parametre',
       component: ParametreView,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/statistiques',
+      name: 'statistiques',
+      component: StatistiquesView,
       meta: {
         requiresAuth: true
       }
