@@ -11,9 +11,7 @@ import router from '@/router/index.js';
     <header>
         <nav class="side">
           <RouterLink to="/"><img src="./assets/icone.png" style="width: 100px;height: auto;"></RouterLink>
-          <RouterLink to="/Profil">Mon profil</RouterLink>
-          <RouterLink to="/Projet">Mes projets</RouterLink>
-          <RouterLink to="/Activite">Mes activités</RouterLink>
+          <RouterLink to="/Params">Paramètres généraux</RouterLink>
           <router-link to="/logout"><div class="deco">Déconnexion</div></router-link>
         </nav>
     </header>

@@ -1,17 +1,13 @@
 <template>
   <div class="profile-view">
-    <!-- Menu vertical à gauche -->
     <div class="profile-menu">
       <ul>
         <li @click="changeOption('viewProfile')">Mes informations</li>
         <li @click="changeOption('editProfile')">Modifier le profil</li>
-        <!-- Ajoutez d'autres options si nécessaire -->
       </ul>
     </div>
 
-    <!-- Contenu principal -->
     <div class="profile-content">
-      <!-- Affichage du profil ou formulaire de modification en fonction de l'option sélectionnée -->
       <h2 class="day-text">Profil</h2>
       <div v-if="selectedOption === 'viewProfile'">
         <h3 class="day-text">Mon token : {{ key }}</h3>
@@ -19,7 +15,6 @@
         <p>Adresse email : {{ profileInfo.email }}</p>
       </div>
       <div v-else-if="selectedOption === 'editProfile'">
-        <!-- Formulaire de modification du profil -->
         <form @submit.prevent="submitForm">
           <label for="name">Nom complet:</label>
           <input type="text" id="name" v-model="name" required />
@@ -36,8 +31,6 @@
 
 <script>
 import { useAuthStore } from "@/stores/authStore.js";
-import axios from "axios";
-import {mapState} from "pinia";
 
 export default {
   data() {
@@ -46,7 +39,7 @@ export default {
       selectedOption: 'viewProfile',
       name: "",
       email: "",
-      profileInfo: {} // Ajout de l'objet pour stocker les informations du profil
+      profileInfo: {}
     };
   },
   methods: {
@@ -56,13 +49,11 @@ export default {
         this.profileInfo = response.data;
       } catch (error) {
         console.error("Erreur lors de la récupération des informations du profil:", error);
-        // Gérer les erreurs ici
       }
     },
     changeOption(option) {
       this.selectedOption = option;
 
-      // Si l'option est "Mes informations" et les infos du profil ne sont pas encore récupérées, effectuer la requête API
       if (option === 'viewProfile' && Object.keys(this.profileInfo).length === 0) {
         this.fetchProfileInfo();
       }
@@ -77,15 +68,13 @@ export default {
         console.log("Profil mis à jour avec succès:", response.data);
 
         this.selectedOption = 'viewProfile';
-        this.fetchProfileInfo(); // Actualiser les informations du profil après la modification
+        await this.fetchProfileInfo();
       } catch (error) {
         console.error("Erreur lors de la mise à jour du profil:", error);
-        // Gérer les erreurs ici
       }
     },
   },
   mounted() {
-    // Au chargement du composant, récupérer les informations du profil par défaut
     this.fetchProfileInfo();
   }
 };
