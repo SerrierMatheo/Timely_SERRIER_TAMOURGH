@@ -10,17 +10,17 @@ import router from './router/index.js'
 
 const app = createApp(App)
 
-app.use(ApiPlugins, {
-    baseURL: 'https://timely.edu.netlor.fr/',
-    apiKey: ''
-})
-
 const pinia = createPinia()
 app.use(pinia)
 pinia.use(piniaPersist)
 
 import { useAuthStore } from "@/stores/authStore.js";
 const authStore = useAuthStore()
+
+app.use(ApiPlugins, {
+    baseURL: 'https://timely.edu.netlor.fr/',
+    apiKey: authStore.apikey
+})
 
 app.use(router)
 

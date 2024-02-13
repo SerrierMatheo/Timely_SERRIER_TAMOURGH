@@ -9,43 +9,40 @@
   </template>
 
 <script>
-import {useAuthStore} from "@/stores/authStore.js";
-import {mapState, mapActions} from "pinia";
+import { useAuthStore } from "@/stores/authStore.js";
+import { mapActions } from "pinia";
 import router from "@/router/index.js";
 
 export default {
   data() {
     return {
-      key: ''
-    }
-  },
-  computed: {
-    ...mapState(useAuthStore, ["apikey"])
+      key: ""
+    };
   },
   methods: {
     ...mapActions(useAuthStore, ["setApikey"]),
-    submitForm() {
-      console.log(this.apikey);
+    async submitForm() {
+      //permet de vérifier si le token est bon
+      try {
+        const config = {
+          headers: {
+            Authorization: `key=${this.key}`
+          }
+        };
 
-      const config = {
-        headers: {
-          Authorization: `key=${this.key}`
+        const response = await this.$api.get("api/profile", config);
+
+        if (response.status === 200) {
+          this.setApikey(this.key);
+          await router.push("/");
         }
-      };
-
-      this.$api.get('api/profile', config).then((response) => {
-        if(response.status === 200) {
-          this.setApikey(this.key)
-
-          router.push('/')
-        }
-      }).catch((error) => {
-        window.alert("apikey invalide : " + this.key)
-      })
+      } catch (error) {
+        window.alert("apikey invalide : " + this.key);
+      }
     }
   }
 }
 </script>
-  
+
   
  
