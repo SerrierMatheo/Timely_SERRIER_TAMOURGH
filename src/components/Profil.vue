@@ -38,7 +38,9 @@ export default {
 
         this.selectedOption = 'viewProfile';
         await this.fetchProfileInfo();
+        this.$toast.success('Profile modifié avec succès');
       } catch (error) {
+        this.$toast.error('Identifiant invalide');
         console.error("Erreur lors de la mise à jour du profil:", error);
       }
     },

@@ -83,6 +83,7 @@ export default {
         const response = await this.$api.get('api/activities');
         this.activities = response.data;
       } catch (error) {
+        this.$toast.error('Erreur lors de la récupération des activités');
         console.error('Erreur lors de la récupération des activités:', error);
       }
     },
@@ -95,7 +96,9 @@ export default {
         this.activities.push(response.data);
         this.activityName = '';
         this.activitycolor = '';
+        this.$toast.success('Activité créé avec succès');
       } catch (error) {
+        this.$toast.error('Erreur lors de la création de l\'activité');
         console.error('Erreur lors de la création du activité:', error);
       }
     },
@@ -112,8 +115,10 @@ export default {
         if (updatedactivityIndex !== -1) {
           this.activities.splice(updatedactivityIndex, 1, response.data);
         }
+        this.$toast.success('Activité modifier avec succès');
         this.editingactivity = null;
       } catch (error) {
+        this.$toast.error('Erreur lors de la modification de l\'activité');
         console.error('Erreur lors de la modification du activité:', error);
       }
     },
@@ -121,7 +126,9 @@ export default {
       try {
         await this.$api.patch(`/api/activities/${activityId}/disable`);
         await this.fetchactivities();
+        this.$toast.success('Activité désactiver avec succès');
       } catch (error) {
+        this.$toast.error('Erreur lors de la désactivation du Activité');
         console.error('Erreur lors de la désactivation du activité:', error);
       }
     },
@@ -129,7 +136,9 @@ export default {
       try {
         await this.$api.patch(`/api/activities/${activityId}/enable`);
         await this.fetchactivities();
+        this.$toast.success('Activité activer avec succès');
       } catch (error) {
+        this.$toast.error('Erreur lors de l\'activation du Activité');
         console.error("Erreur lors de l'activation du activité:", error);
       }
     },

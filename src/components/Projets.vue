@@ -83,6 +83,7 @@ export default {
         const response = await this.$api.get('api/projects');
         this.projects = response.data;
       } catch (error) {
+        this.$toast.error('Erreur lors de la récupération des projets');
         console.error('Erreur lors de la récupération des projets:', error);
       }
     },
@@ -95,7 +96,9 @@ export default {
         this.projects.push(response.data);
         this.projectName = '';
         this.projectDescription = '';
+        this.$toast.success('Projet créé avec succès');
       } catch (error) {
+        this.$toast.error('Erreur lors de la création du projet');
         console.error('Erreur lors de la création du projet:', error);
       }
     },
@@ -112,8 +115,10 @@ export default {
         if (updatedProjectIndex !== -1) {
           this.projects.splice(updatedProjectIndex, 1, response.data);
         }
+        this.$toast.success('Projet modifier avec succès');
         this.editingProject = null;
       } catch (error) {
+        this.$toast.error('Erreur lors de la modification du projet');
         console.error('Erreur lors de la modification du projet:', error);
       }
     },
@@ -121,7 +126,9 @@ export default {
       try {
         await this.$api.patch(`/api/projects/${projectId}/disable`);
         await this.fetchProjects();
+        this.$toast.success('Projet désactiver avec succès');
       } catch (error) {
+        this.$toast.error('Erreur lors de la désactivation du projet');
         console.error('Erreur lors de la désactivation du projet:', error);
       }
     },
@@ -129,7 +136,9 @@ export default {
       try {
         await this.$api.patch(`/api/projects/${projectId}/enable`);
         await this.fetchProjects();
+        this.$toast.success('Projet activer avec succès');
       } catch (error) {
+        this.$toast.error('Erreur lors de l\'activation du projet');
         console.error("Erreur lors de l'activation du projet:", error);
       }
     },
