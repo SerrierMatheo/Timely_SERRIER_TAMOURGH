@@ -40,7 +40,7 @@ export default {
           this.$toast.error('Identifiant invalide');
         }
       } catch (error) {
-        window.alert("apikey invalide : " + this.key);
+        this.$toast.error('Identifiant invalide');
       }
     }
   }

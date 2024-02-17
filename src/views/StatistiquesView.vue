@@ -23,7 +23,7 @@
     </div>
 
     <!-- Statistiques générales -->
-    <div v-if="reportGenerated">
+    <div v-if="reportGenerated && !selectedProject">
       <p>Temps total travaillé: {{ totalTimeWorked }} heures</p>
       <p>Nombre de projets concernés: {{ numberOfProjects }}</p>
     </div>
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import Chart from 'chart.js/auto';
 
 export default {
   data() {
@@ -64,9 +65,105 @@ export default {
       reportGenerated: false,
     };
   },
+  computed: {
+    filteredTimeEntries() {
+      // Appliquer les filtres de date et de projet
+      // Retourner la liste filtrée
+    },
+    totalTimeWorked() {
+      // Calculer le temps total travaillé sur la période
+    },
+    numberOfProjects() {
+      // Calculer le nombre de projets concernés
+    },
+    sortedTimeEntries() {
+      // Trier les time-entries par ordre chronologique
+      return this.timeEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+    },
+  },
+  watch: {
+    selectedProject() {
+      this.generateReport();
+    },
+  },
+  methods: {
+    async generateReport() {
+      // Générer le rapport en utilisant les données filtrées
+      // Mettre à jour les données nécessaires pour les statistiques et graphiques
+      this.generateProjectChart();
+      this.generateActivityChart();
+      this.reportGenerated = true;
+    },
+    generateProjectChart() {
+      // Utiliser Chart.js pour générer le graphique par projet
+      // Utiliser les données nécessaires (projets, temps travaillé par projet)
+      const ctx = document.getElementById('projectChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: this.projects.map(project => project.name),
+          datasets: [{
+            label: 'Temps travaillé par projet',
+            data: this.calculateTimeByProject(),
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    },
+
+    generateActivityChart() {
+      // Utiliser Chart.js pour générer le graphique par type d'activité
+      // Utiliser les données nécessaires (activités, temps travaillé par activité)
+      const ctx = document.getElementById('activityChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: this.activities.map(activity => activity.name),
+          datasets: [{
+            label: 'Temps travaillé par activité',
+            data: this.calculateTimeByActivity(),
+            backgroundColor: this.activities.map(activity => activity.color),
+            hoverOffset: 4,
+          }],
+        },
+      });
+    },
+
+    // Méthode pour calculer le temps travaillé par projet
+    calculateTimeByProject() {
+      // Implémentez la logique pour calculer le temps travaillé par projet sur la période sélectionnée
+      // Utilisez les données de timeEntries
+    },
+
+    // Méthode pour calculer le temps travaillé par activité
+    calculateTimeByActivity() {
+      // Implémentez la logique pour calculer le temps travaillé par activité sur la période sélectionnée
+      // Utilisez les données de timeEntries
+    },
+  },
+  async mounted() {
+    // Appels API pour récupérer les projets et les time-entries
+    try {
+      const projectsResponse = await this.$api.get('api/projects');
+      this.projects = projectsResponse.data;
+
+      const timeEntriesResponse = await this.$api.get('api/time-entries');
+      this.timeEntries = timeEntriesResponse.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+    }
+  },
 };
 </script>
 
 <style scoped>
-/* Ajoutez du style si nécessaire */
 </style>
