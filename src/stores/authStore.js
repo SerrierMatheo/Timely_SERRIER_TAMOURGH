@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', {
         },
         removeApikey() {
             this.apikey = null;
-          },
+            },
     },
     persist: {
         enabled: true,

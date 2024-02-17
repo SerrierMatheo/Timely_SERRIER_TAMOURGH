@@ -29,6 +29,8 @@ export default {
     },
     async submitForm() {
       try {
+        this.name = "";
+        this.email = "";
         const response = await this.$api.put("api/profile", {
           name: this.name,
           email: this.email

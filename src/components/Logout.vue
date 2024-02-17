@@ -6,7 +6,6 @@ export default {
     logout() {
       const authStore = useAuthStore();
       authStore.removeApikey();
-      // Redirection facultative vers une autre route après la déconnexion
       this.$router.push('/');
     }
   }

@@ -4,7 +4,7 @@
       <RouterLink to="/"><img src="../assets/icone.png" style="width: 100px;height: auto;"></RouterLink>
       <RouterLink to="/Settings">Paramètres généraux</RouterLink>
       <RouterLink to="/Statistiques">Statistiques</RouterLink>
-      <router-link to="/logout"><div class="deco">Déconnexion</div></router-link>
+      <RouterLink to="/logout"><div class="deco">Déconnexion</div></RouterLink>
     </nav>
   </header>
 </template>
