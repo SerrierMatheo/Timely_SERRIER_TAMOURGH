@@ -1,9 +1,11 @@
 <script>
 import Timetracker from "@/components/timetracker.vue";
+import DailyObjectives from "@/components/daily-objectives.vue";
 
 export default {
   components: {
-    Timetracker
+    Timetracker,
+    DailyObjectives
   },
 }
 </script>
@@ -11,6 +13,7 @@ export default {
 <template>
   <main class="day-text">
     <Timetracker/>
+    <DailyObjectives/>
   </main>
 </template>
 
