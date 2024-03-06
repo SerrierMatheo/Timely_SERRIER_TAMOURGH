@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import ParametreView from "@/views/ParametreView.vue";
 import ConnexionView from '../views/ConnexionView.vue'
 import InscriptionView from '../views/InscriptionView.vue'
 import AuthView from "../views/AuthView.vue";
 import LogoutVue from '../components/Logout.vue'
 import StatistiquesView from "@/views/StatistiquesView.vue";
+import test from "@/views/test.vue";
+import Home from "@/views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +14,15 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: test,
       meta: {
         requiresAuth: true
       }
