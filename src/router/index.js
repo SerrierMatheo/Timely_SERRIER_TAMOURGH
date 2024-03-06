@@ -20,14 +20,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/test',
-      name: 'test',
-      component: test,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
       path: '/settings',
       name: 'settings',
       component: ParametreView,
