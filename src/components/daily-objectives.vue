@@ -19,11 +19,21 @@
       </form>
     </div>
 
+    <form v-if="editingObjective" @submit.prevent="updateObjective" class="formulaire">
+      <label for="editObjectiveName">Nom :</label>
+      <input type="text" id="editObjectiveName" v-model="editingObjective.name">
+
+      <label for="editObjectiveColor">Couleur :</label>
+      <input type="color" id="editObjectiveColor" v-model="editingObjective.color">
+
+      <button type="submit" class="btn">Enregistrer les modifications</button>
+    </form>
+
     <!-- Liste des objectifs à atteindre -->
     <h3>Objectifs à atteindre</h3>
-    <div v-if="filteredObjectives && filteredObjectives.length > 0">
+    <div v-if="todoObjectives && todoObjectives.length > 0">
       <ul>
-        <li v-for="objective in filteredObjectives" :key="objective.id">
+        <li v-for="objective in todoObjectives" :key="objective.id">
           {{ objective.name }} - {{ objective.content }}
           <button @click="markObjectiveAsDone(objective.id)" class="manual">Marquer comme atteint</button>
           <button @click="editObjective(objective)" class="manual">Modifier</button>
@@ -62,6 +72,9 @@
       <ul>
         <li v-for="objective in pastObjectives" :key="objective.id">
           {{ objective.name }} - {{ objective.content }}
+          <button @click="markObjectiveAsUnDone(objective.id)">Marquer comme non atteint</button>
+          <button @click="editObjective(objective)">Modifier</button>
+          <button @click="deleteObjective(objective.id)">Supprimer</button>
           <!-- Boutons pour gérer les objectifs passés -->
         </li>
       </ul>
@@ -89,15 +102,31 @@ export default {
         done: '',
         keywords: '',
       },
-      createObjectiveFormVisible: false, // Nouvelle donnée pour gérer la visibilité du formulaire
+      createObjectiveFormVisible: false,
+      editingObjective: null,
     };
   },
   computed: {
-    filteredObjectives() {
-      return this.objectives;
+    todoObjectives() {
+      return this.objectives.filter((objective) => {
+        return (
+            !objective.done &&
+            (!this.filters.date || objective.date === this.filters.date) &&
+            (!this.filters.keywords ||
+                objective.name.toLowerCase().includes(this.filters.keywords.toLowerCase()) ||
+                objective.content.toLowerCase().includes(this.filters.keywords.toLowerCase()))
+        );
+      });
     },
     pastObjectives() {
       return this.objectives.filter((objective) => {
+        return (
+            objective.done &&
+            (!this.filters.date || objective.date === this.filters.date) &&
+            (!this.filters.keywords ||
+                objective.name.toLowerCase().includes(this.filters.keywords.toLowerCase()) ||
+                objective.content.toLowerCase().includes(this.filters.keywords.toLowerCase()))
+        );
       });
     },
   },
@@ -126,24 +155,65 @@ export default {
         // Gérer les erreurs de l'API
         this.$toast.error('Erreur lors de la création de l\'objectif:');
       }
-    }
-,
+    },
 
-    // Exemple de méthode pour marquer un objectif comme atteint
     async markObjectiveAsDone(objectiveId) {
-      // Logique pour marquer un objectif comme atteint
+      try {
+        await this.$api.patch(`api/daily-objectives/${objectiveId}/done`);
+        this.$toast.success('objectif complété avec succès');
+        await this.fetchObjectives();
+      } catch (error) {
+        console.error('Erreur lors de la complétion de l\'objectif', error);
+      }
     },
 
-    // Exemple de méthode pour modifier un objectif
+    async markObjectiveAsUnDone(objectiveId) {
+      try {
+        await this.$api.patch(`api/daily-objectives/${objectiveId}/undone`);
+        this.$toast.success('objectif mis à jour avec succès');
+        await this.fetchObjectives();
+      } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'objectif', error);
+      }
+    },
+
     async editObjective(objective) {
-      // Logique pour modifier un objectif
+      this.editingObjective = { ...objective };
+      await this.fetchObjectives();
     },
 
-    // Exemple de méthode pour supprimer un objectif
+    async updateObjective() {
+      try {
+        const response = await this.$api.put(`api/daily-objectives/${this.editingObjective.id}`, {
+          name: this.editingObjective.name,
+          color: this.editingObjective.color,
+        });
+
+        const updatedObjectivesIndex = this.objectives.findIndex(o => o.id === this.editingObjective.id);
+        if (updatedObjectivesIndex !== -1) {
+          this.objectives[updatedObjectivesIndex] = response.data;
+        }
+
+        await this.fetchObjectives();
+
+        this.$toast.success('Objectif mis à jour avec succès');
+        this.editingObjective = null;
+      } catch (error) {
+        this.$toast.error('Erreur lors de la modification de l\'objectif');
+        console.error('Erreur lors de la modification de l\'objectif:', error);
+      }
+    },
+
     async deleteObjective(objectiveId) {
-      // Logique pour supprimer un objectif
-    },
+      try {
+        await this.$api.delete(`api/daily-objectives/${objectiveId}`);
+        this.$toast.success('Objectif supprimée avec succès');
 
+        await this.fetchObjectives();
+      } catch (error) {
+        console.error('Erreur lors de la suppression de l`objectif', error);
+      }
+    },
     async fetchObjectives() {
       try {
         const response = await this.$api.get('api/daily-objectives');
