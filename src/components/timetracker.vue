@@ -118,6 +118,9 @@
 
 <script>
 
+import {useWorkTimeStore} from "@/stores/workTimeStore.js";
+import { mapActions } from "pinia";
+
 export default {
   data() {
     return {
@@ -166,6 +169,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(useWorkTimeStore, ["addWorkTime"]),
     async startEntry() {
       try {
         const requestData = {
@@ -193,6 +197,12 @@ export default {
     async stopEntry() {
       try {
         await this.$api.patch(`api/time-entries/${this.runningActivity.id}/stop`);
+
+        const elapsedTimeInSeconds = this.elapsedTime;
+        console.log(elapsedTimeInSeconds)
+        const workTimeStore = useWorkTimeStore().workTime;
+        this.addWorkTime(elapsedTimeInSeconds);
+        console.log("test" + workTimeStore);
 
         this.isActivityRunning = false;
         this.runningActivity = null;

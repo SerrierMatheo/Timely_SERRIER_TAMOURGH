@@ -18,7 +18,10 @@ app.use(pinia)
 pinia.use(piniaPersist)
 
 import { useAuthStore } from "@/stores/authStore.js";
-const authStore = useAuthStore()
+const authStore = useAuthStore();
+
+import { useWorkTimeStore } from "@/stores/workTimeStore.js";
+const workTimeStore = useWorkTimeStore();
 
 app.use(ApiPlugins, {
     baseURL: 'https://timely.edu.netlor.fr/',
