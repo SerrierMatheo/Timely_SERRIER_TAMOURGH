@@ -4,22 +4,26 @@
 
     <!-- Filtres de date -->
     <div>
+      <form class="formulaire">
       <label for="startDate">Du:</label>
       <input type="date" id="startDate" v-model="startDate" required />
 
       <label for="endDate">Au:</label>
       <input type="date" id="endDate" v-model="endDate" required />
 
-      <button @click="generateReport">Générer le rapport</button>
+      <button @click="generateReport" class="btn">Générer le rapport</button>
+    </form>
     </div>
 
     <!-- Filtre de projet (optionnel) -->
     <div v-if="showProjectFilter">
+      <form class="formulaire">
       <label for="projectFilter">Projet:</label>
       <select id="projectFilter" v-model="selectedProject">
         <option value="" disabled>Sélectionner un projet</option>
         <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
       </select>
+    </form>
     </div>
 
     <!-- Statistiques générales -->
@@ -166,4 +170,29 @@ export default {
 </script>
 
 <style scoped>
+
+h2{
+  text-align: center;
+}
+
+label{
+    margin-bottom: 1em;
+  }
+  input,select{
+    margin-bottom: 1em;
+    background-color: rgb(76, 76, 76);
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em;
+  }
+  form.formulaire {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 2em;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
 </style>

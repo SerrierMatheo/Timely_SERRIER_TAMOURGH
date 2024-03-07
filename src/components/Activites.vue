@@ -170,8 +170,14 @@ export default {
   label{
     margin-bottom: 1em;
   }
-  input{
+
+  input,select{
     margin-bottom: 1em;
+    background-color: rgb(76, 76, 76);
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em;
   }
   form.formulaire {
     display: flex;

@@ -5,7 +5,6 @@ import InscriptionView from '../views/InscriptionView.vue'
 import AuthView from "../views/AuthView.vue";
 import LogoutVue from '../components/Logout.vue'
 import StatistiquesView from "@/views/StatistiquesView.vue";
-import test from "@/views/test.vue";
 import Home from "@/views/HomeView.vue";
 
 const router = createRouter({

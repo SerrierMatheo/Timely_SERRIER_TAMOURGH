@@ -168,9 +168,14 @@ export default {
 label{
   margin-bottom: 1em;
 }
-input{
-  margin-bottom: 1em;
-}
+input,select,textarea{
+    margin-bottom: 1em;
+    background-color: rgb(76, 76, 76);
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em;
+  }
 form.formulaire {
   display: flex;
   flex-direction: column;
@@ -204,6 +209,7 @@ h2,h3{
   border-radius: 0.8em;
   overflow: hidden;
 }
+
 
 .search_icon {
   height: 1em;
