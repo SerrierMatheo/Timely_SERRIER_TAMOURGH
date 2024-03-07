@@ -3,19 +3,19 @@
   <div>
     <h2>Gérer les Objectifs</h2>
 
-    <button @click="showCreateObjectiveForm">Ajouter un objectif</button>
+    <button @click="showCreateObjectiveForm" class="manual2">Ajouter un objectif</button>
 
     <!-- Formulaire d'ajout d'un objectif -->
     <div v-if="createObjectiveFormVisible">
       <h3>Créer un nouvel objectif</h3>
-      <form @submit.prevent="createObjective">
+      <form @submit.prevent="createObjective" class="formulaire">
         <label for="objectiveName">Nom de l'objectif:</label>
         <input type="text" id="objectiveName" v-model="newObjective.name" required />
 
         <label for="objectiveContent">Contenu de l'objectif:</label>
         <textarea id="objectiveContent" v-model="newObjective.content"></textarea>
 
-        <button type="submit">Créer l'objectif</button>
+        <button type="submit" class="manual">Créer l'objectif</button>
       </form>
     </div>
 
@@ -25,9 +25,9 @@
       <ul>
         <li v-for="objective in filteredObjectives" :key="objective.id">
           {{ objective.name }} - {{ objective.content }}
-          <button @click="markObjectiveAsDone(objective.id)">Marquer comme atteint</button>
-          <button @click="editObjective(objective)">Modifier</button>
-          <button @click="deleteObjective(objective.id)">Supprimer</button>
+          <button @click="markObjectiveAsDone(objective.id)" class="manual">Marquer comme atteint</button>
+          <button @click="editObjective(objective)" class="manual">Modifier</button>
+          <button @click="deleteObjective(objective.id)" class="manual">Supprimer</button>
         </li>
       </ul>
     </div>
@@ -36,20 +36,25 @@
     </div>
 
     <!-- Formulaire pour filtrer les objectifs -->
+    <form class="formulaire">
     <div class="filters">
       <label for="dateFilter">Filtrer par date :</label>
+      <br><br>
       <input type="date" id="dateFilter" v-model="filters.date" />
-
+      <br>
       <label for="doneFilter">Filtrer par accomplissement :</label>
+      <br><br>
       <select id="doneFilter" v-model="filters.done">
         <option value="">Tous</option>
         <option value="0">Non accomplis</option>
         <option value="1">Accomplis</option>
       </select>
-
+      <br>
       <label for="keywordsFilter">Rechercher par mots-clés :</label>
+      <br><br>
       <input type="text" id="keywordsFilter" v-model="filters.keywords" />
     </div>
+  </form>
 
     <!-- Liste des objectifs passés réalisés -->
     <h3>Objectifs passés</h3>
@@ -157,5 +162,74 @@ export default {
 </script>
 
 <style scoped>
-/* Ajouter du style si nécessaire */
+h2,h3,p{
+  margin-left: 2em;
+}
+
+.forms-container {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 2em;
+  margin-left: auto;
+  margin-right: auto;
+
+
+}
+.form-container {
+  flex: 1;
+  margin: 0 10px 0 10px; /* Espacement entre les deux formulaires */
+  
+  align-items: center;
+}
+label,select{
+    margin-bottom: 1em;
+  }
+  input,select,option,textarea{
+    margin-bottom: 1em;
+    background-color: rgb(76, 76, 76);
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em;
+  }
+
+  select{
+    width: 200px;
+  }
+
+  #keywordsFilter{
+    width: 200px;
+
+  }
+  form.formulaire {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+  .manual{
+    padding:0.7em;
+    background-color:#5216a8 ;
+    color: white;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .manual2{
+    padding:0.7em;
+    background-color:#5216a8 ;
+    color: white;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 3em;
+  }
+
+  #centrer{
+    margin-left: 2.5em;
+  }
 </style>
