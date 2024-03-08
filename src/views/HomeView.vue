@@ -5,20 +5,20 @@
       <button @click="showDailyObjectives"class="radio" name="radio">Daily Objectives</button>
     </div>
     <!--<Timetracker v-if="showingTimetracker" />-->
-    <test v-if="showingTimetracker" />
+    <Timetracker v-if="showingTimetracker" />
     <DailyObjectives v-if="showingDailyObjectives" />
   </main>
 </template>
 
 <script>
-//import Timetracker from "@/components/timetracker.vue";
-import test from "@/components/test.vue";
+import Timetracker from "@/components/timetracker.vue";
+//import test from "@/components/test.vue";
 import DailyObjectives from "@/components/daily-objectives.vue";
 
 export default {
   components: {
-    //Timetracker,
-    test,
+    Timetracker,
+    //test,
     DailyObjectives
   },
   data() {
