@@ -1,5 +1,6 @@
 <template>
   <div>
+    <form class="formulaire">
     <h2>Reporting / Statistiques</h2>
 
     <label for="startDate">Du :</label>
@@ -8,13 +9,15 @@
     <label for="endDate">Au :</label>
     <input type="date" id="endDate" v-model="endDate" required />
 
-    <button @click="applyFilters">Appliquer</button>
-
+    <button @click="applyFilters" class="btn">Appliquer</button>
+  </form>
+  <form class="formulaire">
     <p>Temps total travaillé sur la période : {{ formattedTotalTime }}</p>
 
     <canvas id="timeDistributionChart"></canvas>
 
     <p>Nombre de projets concernés : {{ projectsCount }}</p>
+  </form>
   </div>
 </template>
 
@@ -141,4 +144,83 @@ export default {
 </script>
 
 <style>
+label{
+  margin-bottom: 1em;
+}
+input,select,textarea{
+    margin-bottom: 1em;
+    background-color: rgb(76, 76, 76);
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em;
+  }
+form.formulaire {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  padding: 2em;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+.result{
+
+  text-align: center;
+}
+
+h2,h3{
+  margin-top: 2em;
+}
+p{
+  text-align: center;
+}
+.inputBox_container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  max-width: 14em;
+  
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  height: fit-content;
+  background-color: #5c6370;
+  border-radius: 0.8em;
+  overflow: hidden;
+}
+
+
+.search_icon {
+  height: 1em;
+  padding: 0 0.5em 0 0.5em;
+  fill: #abb2bf;
+}
+
+.inputBox {
+  background-color: transparent;
+  color: #ffffff;
+  outline: none;
+  margin-top: 0.8em;
+  width: 100%;
+  border: 0;
+  padding:0;
+}
+
+::placeholder {
+  color: #abb2bf;
+}
+
+.btn{
+  margin-top: 1em;
+  background-color: #5216a8;
+  color: white;
+}
+
+.smallBtn{
+  color: white;
+  background-color: #5216a8;
+  margin-top: 1em;
+}
+
 </style>

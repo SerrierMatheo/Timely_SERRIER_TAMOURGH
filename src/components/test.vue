@@ -4,50 +4,68 @@
 
     <!-- Time Tracker -->
     <div class="time-tracker">
+      <form class="formulaire2">
       <h3>Time Tracker</h3>
-      <div v-if="!isActivityRunning">
+      <div v-if="!isActivityRunning" clas>
+        
         <label for="project">Projet :</label>
+        <br>
         <select id="project" v-model="selectedProject">
+          <br>
           <option value="" disabled>Sélectionner un projet</option>
+          <br>
           <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
+          <br>
         </select>
-
+        <br>
         <label for="activity">Type d'activité :</label>
+        <br>
         <select id="activity" v-model="selectedActivity">
+          <br>
           <option value="" disabled>Sélectionner un type d'activité</option>
+          <br>
           <option v-for="activity in activities" :key="activity.id" :value="activity.id">{{ activity.name }}</option>
         </select>
-
+        <br>
         <button @click="startEntry" class="manual">Démarrer l'activité</button>
       </div>
+    
 
       <div v-else>
+        
         <p>Activité en cours : {{ runningActivity.activity.name }}</p>
         <p>Temps écoulé : {{ formatElapsedTime }}</p>
         <textarea v-model="entryNotes" placeholder="Notes sur l'activité (Markdown)"></textarea>
         <button @click="stopEntry" class="manual">Arrêter l'activité</button>
       </div>
+    </form>
     </div>
-
+  
     <!-- Liste des activités réalisées -->
     <div>
+      <form class="formulaire2">
       <h3>Activités réalisées ce jour</h3>
 
       <!-- Filtres facultatifs -->
       <div class="filters">
         <label for="projectFilter">Filtrer par projet :</label>
+        <br>
         <select id="projectFilter" v-model="filters.project">
           <option value="" disabled>Sélectionner un projet</option>
           <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
         </select>
-
+        <br>
         <label for="activityFilter">Filtrer par activité :</label>
+        <br>
         <select id="activityFilter" v-model="filters.activity">
+          
           <option value="" disabled>Sélectionner un type d'activité</option>
+          
           <option v-for="activity in activities" :key="activity.id" :value="activity.id">{{ activity.name }}</option>
         </select>
-
+        <br>
         <label for="keywordsFilter">Filtrer par mots-clés :</label>
+        <br>
         <input type="text" id="keywordsFilter" v-model="filters.keywords" />
       </div>
 
@@ -83,7 +101,7 @@
 
         <button type="submit" class="manual">Enregistrer les modifications</button>
       </form>
-
+    </form>
       <button @click="showManualEntryForm" class="manual" id="centrer">Ajouter manuellement</button>
       <div class="manual-entry-form" v-if="showManualForm">
 
@@ -112,6 +130,7 @@
           <button type="submit" class="manual">Ajouter</button>
         </form>
       </div>
+    
     </div>
 
   </div>
@@ -346,6 +365,7 @@ h2{
   display: flex;
   margin-left:20%;
   margin-right: auto;
+  
 
 
 }
@@ -358,6 +378,15 @@ h2{
 label,select{
   margin-bottom: 1em;
 }
+
+form.formulaire2 {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+  padding: 2em;
+
+}
+
 input,select,option,textarea{
   margin-bottom: 1em;
   background-color: rgb(76, 76, 76);
@@ -373,14 +402,6 @@ select{
 
 #keywordsFilter{
   width: 200px;
-
-}
-form.formulaire {
-  display: flex;
-  flex-direction: column;
-  padding: 2em;
-  margin-left: auto;
-  margin-right: auto;
 
 }
 

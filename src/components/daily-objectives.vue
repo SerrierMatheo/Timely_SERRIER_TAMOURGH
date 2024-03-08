@@ -46,7 +46,7 @@
     </div>
 
     <!-- Formulaire pour filtrer les objectifs -->
-    <form class="formulaire">
+    <form class="formulaire2">
     <div class="filters">
       <label for="dateFilter">Filtrer par date :</label>
       <br><br>
@@ -82,6 +82,7 @@
     <div v-else>
       <p>Aucun objectif passé trouvé.</p>
     </div>
+  
 
   </div>
 </template>
@@ -252,9 +253,21 @@ h2,h3,p{
   
   align-items: center;
 }
+
+form.formulaire2 {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+  padding: 2em;
+
+}
 label,select{
     margin-bottom: 1em;
   }
+
+input#dateFilter{
+  width: 200px;
+}
   input,select,option,textarea{
     margin-bottom: 1em;
     background-color: rgb(76, 76, 76);
@@ -267,6 +280,8 @@ label,select{
   select{
     width: 200px;
   }
+
+ 
 
   #keywordsFilter{
     width: 200px;
