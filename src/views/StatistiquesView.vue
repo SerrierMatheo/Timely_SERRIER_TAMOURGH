@@ -1,56 +1,20 @@
 <template>
-  <div class="reporting">
+  <div>
     <h2>Reporting / Statistiques</h2>
 
-    <!-- Filtres de date -->
-    <div>
-      <form class="formulaire">
-      <label for="startDate">Du:</label>
-      <input type="date" id="startDate" v-model="startDate" required />
+    <label for="startDate">Du :</label>
+    <input type="date" id="startDate" v-model="startDate" required />
 
-      <label for="endDate">Au:</label>
-      <input type="date" id="endDate" v-model="endDate" required />
+    <label for="endDate">Au :</label>
+    <input type="date" id="endDate" v-model="endDate" required />
 
-      <button @click="generateReport" class="btn">Générer le rapport</button>
-    </form>
-    </div>
+    <button @click="applyFilters">Appliquer</button>
 
-    <!-- Filtre de projet (optionnel) -->
-    <div v-if="showProjectFilter">
-      <form class="formulaire">
-      <label for="projectFilter">Projet:</label>
-      <select id="projectFilter" v-model="selectedProject">
-        <option value="" disabled>Sélectionner un projet</option>
-        <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
-      </select>
-    </form>
-    </div>
+    <p>Temps total travaillé sur la période : {{ formattedTotalTime }}</p>
 
-    <!-- Statistiques générales -->
-    <div v-if="reportGenerated && !selectedProject">
-      <p>Temps total travaillé: {{ totalTimeWorked }} heures</p>
-      <p>Nombre de projets concernés: {{ numberOfProjects }}</p>
-    </div>
+    <canvas id="timeDistributionChart"></canvas>
 
-    <!-- Graphique par projet -->
-    <div v-if="reportGenerated && !selectedProject">
-      <canvas id="projectChart"></canvas>
-    </div>
-
-    <!-- Graphique par type d'activité -->
-    <div v-if="reportGenerated && !selectedProject">
-      <canvas id="activityChart"></canvas>
-    </div>
-
-    <!-- Liste des entrées triées par ordre chronologique -->
-    <div v-if="reportGenerated">
-      <h3>Logs des time-entries:</h3>
-      <ul>
-        <li v-for="entry in sortedTimeEntries" :key="entry.id">
-          {{ entry.date }} - {{ entry.projectName }} - {{ entry.activityName }} - {{ entry.duration }} heures
-        </li>
-      </ul>
-    </div>
+    <p>Nombre de projets concernés : {{ projectsCount }}</p>
   </div>
 </template>
 
@@ -60,59 +24,99 @@ import Chart from 'chart.js/auto';
 export default {
   data() {
     return {
-      startDate: new Date().toISOString().split('T')[0],
-      endDate: new Date().toISOString().split('T')[0],
-      selectedProject: '',
-      showProjectFilter: true,
-      projects: [], // Remplacez par la liste des projets récupérée de l'API
-      timeEntries: [], // Remplacez par la liste des time-entries récupérée de l'API
-      reportGenerated: false,
+      startDate: '',
+      endDate: '',
+      timeEntries: [],
+      projects: [],
     };
   },
   computed: {
-    filteredTimeEntries() {
-      // Appliquer les filtres de date et de projet
-      // Retourner la liste filtrée
+    formattedTotalTime() {
+      const totalTime = this.calculateTotalTime();
+      return this.formatTime(totalTime);
     },
-    totalTimeWorked() {
-      // Calculer le temps total travaillé sur la période
-    },
-    numberOfProjects() {
-      // Calculer le nombre de projets concernés
-    },
-    sortedTimeEntries() {
-      // Trier les time-entries par ordre chronologique
-      return this.timeEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
-    },
-  },
-  watch: {
-    selectedProject() {
-      this.generateReport();
+    projectsCount() {
+      return this.calculateProjectsCount();
     },
   },
   methods: {
-    async generateReport() {
-      // Générer le rapport en utilisant les données filtrées
-      // Mettre à jour les données nécessaires pour les statistiques et graphiques
-      this.generateProjectChart();
-      this.generateActivityChart();
-      this.reportGenerated = true;
+    async applyFilters() {
+      await this.fetchProjectsAndActivities();
+      await this.fetchTimeEntries();
+
+      const filteredTimeEntries = this.timeEntries.filter(entry => {
+        const entryDate = new Date(entry.start_time);
+        return entryDate >= new Date(this.startDate) && entryDate <= new Date(this.endDate);
+      });
+
+      this.timeEntries = filteredTimeEntries;
+      this.updateChart();
     },
-    generateProjectChart() {
-      // Utiliser Chart.js pour générer le graphique par projet
-      // Utiliser les données nécessaires (projets, temps travaillé par projet)
-      const ctx = document.getElementById('projectChart').getContext('2d');
+    async fetchProjectsAndActivities() {
+      try {
+        const projectsResponse = await this.$api.get('api/projects');
+        this.projects = projectsResponse.data;
+
+        const activitiesResponse = await this.$api.get('api/activities');
+        this.activities = activitiesResponse.data;
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+    },
+    async fetchTimeEntries() {
+      try {
+        const response = await this.$api.get('api/time-entries');
+        const entries = response.data;
+
+        const projectsResponse = await this.$api.get('api/projects');
+        const activitiesResponse = await this.$api.get('api/activities');
+        const projectsMap = projectsResponse.data.reduce((map, project) => {
+          map[project.id] = project.name;
+          return map;
+        }, {});
+        const activitiesMap = activitiesResponse.data.reduce((map, activity) => {
+          map[activity.id] = activity.name;
+          return map;
+        }, {});
+
+        this.timeEntries = entries.map(entry => ({
+          ...entry,
+          projectName: projectsMap[entry.project_id],
+          activityName: activitiesMap[entry.activity_id],
+        }));
+      } catch (error) {
+        console.error('Erreur lors de la récupération des entrées:', error);
+      }
+    },
+    calculateTotalTime() {
+      return this.timeEntries.reduce((total, entry) => total + entry.duration, 0);
+    },
+    calculateProjectsCount() {
+      return new Set(this.timeEntries.map(entry => entry.project_id)).size;
+    },
+    updateChart() {
+      const ctx = document.getElementById('timeDistributionChart').getContext('2d');
+
+      const projectLabels = Array.from(new Set(this.timeEntries.map(entry => entry.projectName)));
+      const timeData = projectLabels.map(projectName =>
+          this.timeEntries
+              .filter(entry => entry.projectName === projectName)
+              .reduce((total, entry) => total + entry.duration, 0)
+      );
+
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: this.projects.map(project => project.name),
-          datasets: [{
-            label: 'Temps travaillé par projet',
-            data: this.calculateTimeByProject(),
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-          }],
+          labels: projectLabels,
+          datasets: [
+            {
+              label: 'Temps travaillé par projet',
+              data: timeData,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            },
+          ],
         },
         options: {
           scales: {
@@ -123,76 +127,18 @@ export default {
         },
       });
     },
-
-    generateActivityChart() {
-      // Utiliser Chart.js pour générer le graphique par type d'activité
-      // Utiliser les données nécessaires (activités, temps travaillé par activité)
-      const ctx = document.getElementById('activityChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: this.activities.map(activity => activity.name),
-          datasets: [{
-            label: 'Temps travaillé par activité',
-            data: this.calculateTimeByActivity(),
-            backgroundColor: this.activities.map(activity => activity.color),
-            hoverOffset: 4,
-          }],
-        },
-      });
+    formatTime(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+      return `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(remainingSeconds)}`;
     },
-
-    // Méthode pour calculer le temps travaillé par projet
-    calculateTimeByProject() {
-      // Implémentez la logique pour calculer le temps travaillé par projet sur la période sélectionnée
-      // Utilisez les données de timeEntries
+    pad(value) {
+      return value.toString().padStart(2, '0');
     },
-
-    // Méthode pour calculer le temps travaillé par activité
-    calculateTimeByActivity() {
-      // Implémentez la logique pour calculer le temps travaillé par activité sur la période sélectionnée
-      // Utilisez les données de timeEntries
-    },
-  },
-  async mounted() {
-    // Appels API pour récupérer les projets et les time-entries
-    try {
-      const projectsResponse = await this.$api.get('api/projects');
-      this.projects = projectsResponse.data;
-
-      const timeEntriesResponse = await this.$api.get('api/time-entries');
-      this.timeEntries = timeEntriesResponse.data;
-    } catch (error) {
-      console.error('Erreur lors de la récupération des données:', error);
-    }
   },
 };
 </script>
 
-<style scoped>
-
-h2{
-  text-align: center;
-}
-
-label{
-    margin-bottom: 1em;
-  }
-  input,select{
-    margin-bottom: 1em;
-    background-color: rgb(76, 76, 76);
-    color: white;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.5em;
-  }
-  form.formulaire {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    padding: 2em;
-    margin-left: auto;
-    margin-right: auto;
-
-  }
+<style>
 </style>
