@@ -1,27 +1,23 @@
 <template>
   <div class="activite">
-    <h2>Accueil</h2>
+    <h2>Activité (page d’accueil)</h2>
 
-    <div class="forms-container">
     <!-- Time Tracker -->
-      <form class="formulaire">
+    <div class="time-tracker">
       <h3>Time Tracker</h3>
-
       <div v-if="!isActivityRunning">
         <label for="project">Projet :</label>
-        <br>
         <select id="project" v-model="selectedProject">
           <option value="" disabled>Sélectionner un projet</option>
           <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
         </select>
-        <br>
+
         <label for="activity">Type d'activité :</label>
-        <br>
         <select id="activity" v-model="selectedActivity">
           <option value="" disabled>Sélectionner un type d'activité</option>
           <option v-for="activity in activities" :key="activity.id" :value="activity.id">{{ activity.name }}</option>
         </select>
-        <br><br>
+
         <button @click="startEntry" class="manual">Démarrer l'activité</button>
       </div>
 
@@ -31,50 +27,30 @@
         <textarea v-model="entryNotes" placeholder="Notes sur l'activité (Markdown)"></textarea>
         <button @click="stopEntry" class="manual">Arrêter l'activité</button>
       </div>
-    </form>
-
+    </div>
 
     <!-- Liste des activités réalisées -->
-    <div class="form-container">
-    <form class="formulaire">
     <div>
-
       <h3>Activités réalisées ce jour</h3>
 
       <!-- Filtres facultatifs -->
       <div class="filters">
-        <form class="formulaire">
         <label for="projectFilter">Filtrer par projet :</label>
-        <br>
         <select id="projectFilter" v-model="filters.project">
           <option value="" disabled>Sélectionner un projet</option>
           <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
         </select>
-        <br>
+
         <label for="activityFilter">Filtrer par activité :</label>
-        <br>
         <select id="activityFilter" v-model="filters.activity">
           <option value="" disabled>Sélectionner un type d'activité</option>
           <option v-for="activity in activities" :key="activity.id" :value="activity.id">{{ activity.name }}</option>
         </select>
-        <br>
+
         <label for="keywordsFilter">Filtrer par mots-clés :</label>
-        <br>
         <input type="text" id="keywordsFilter" v-model="filters.keywords" />
-      </form>
       </div>
 
-
-    </div>
-
-
-  </form>
-
-  </div>
-
-</div>
-</div>
-    <div class="fix">
       <ul>
         <li v-for="entry in filteredTimeEntries" :key="entry.id">
           {{ entry.projectName }} - {{ entry.activityName }} - {{ entry.start }} - {{ entry.end }}
@@ -82,7 +58,6 @@
           <button @click="deleteEntry(entry.id)" class="manual">Supprimer</button>
         </li>
       </ul>
-
 
       <form v-if="editingEntry" @submit.prevent="updateEntry" class="formulaire">
         <label for="editEntryProject">Projet :</label>
@@ -108,41 +83,44 @@
 
         <button type="submit" class="manual">Enregistrer les modifications</button>
       </form>
+
+      <button @click="showManualEntryForm" class="manual" id="centrer">Ajouter manuellement</button>
+      <div class="manual-entry-form" v-if="showManualForm">
+
+        <form v-if="showManualForm" @submit.prevent="createManualEntry" class="formulaire">
+          <label for="manualProject">Projet :</label>
+          <select id="manualProject" v-model="manualEntry.project_id">
+            <option value="" disabled>Sélectionner un projet</option>
+            <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
+          </select>
+
+          <label for="manualActivity">Activité :</label>
+          <select id="manualActivity" v-model="manualEntry.activity_id">
+            <option value="" disabled>Sélectionner un type d'activité</option>
+            <option v-for="activity in activities" :key="activity.id" :value="activity.id">{{ activity.name }}</option>
+          </select>
+
+          <label for="manualStartTime">Date et heure de début :</label>
+          <input type="datetime-local" id="manualStartTime" v-model="manualEntry.start" required>
+
+          <label for="manualEndTime">Date et heure de fin :</label>
+          <input type="datetime-local" id="manualEndTime" v-model="manualEntry.end" required>
+
+          <label for="manualComment">Commentaire :</label>
+          <textarea id="manualComment" v-model="manualEntry.comment" placeholder="Commentaire"></textarea>
+
+          <button type="submit" class="manual">Ajouter</button>
+        </form>
+      </div>
     </div>
 
-    <button @click="showManualEntryForm" class="manual" id="centrer">Ajouter manuellement</button>
-
-    <div class="manual-entry-form" v-if="showManualForm">
-      <form v-if="showManualForm" @submit.prevent="createManualEntry" class="formulaire">
-        <label for="manualProject">Projet :</label>
-        <select id="manualProject" v-model="manualEntry.project_id">
-          <option value="" disabled>Sélectionner un projet</option>
-          <option v-for="project in projects" :key="project.id" :value="project.id">{{ project.name }}</option>
-        </select>
-
-        <label for="manualActivity">Activité :</label>
-        <select id="manualActivity" v-model="manualEntry.activity_id">
-          <option value="" disabled>Sélectionner un type d'activité</option>
-          <option v-for="activity in activities" :key="activity.id" :value="activity.id">{{ activity.name }}</option>
-        </select>
-
-        <label for="manualStartTime">Date et heure de début :</label>
-        <input type="datetime-local" id="manualStartTime" v-model="manualEntry.start" required>
-
-        <label for="manualEndTime">Date et heure de fin :</label>
-        <input type="datetime-local" id="manualEndTime" v-model="manualEntry.end" required>
-
-        <label for="manualComment">Commentaire :</label>
-        <textarea id="manualComment" v-model="manualEntry.comment" placeholder="Commentaire"></textarea>
-
-        <button type="submit" class="manual">Ajouter</button>
-      </form>
-    </div>
+  </div>
 </template>
 
 <script>
 
 import {useWorkTimeStore} from "@/stores/workTimeStore.js";
+import {useEntryStore} from "@/stores/entryStore.js";
 import { mapActions } from "pinia";
 
 export default {
@@ -194,6 +172,7 @@ export default {
   },
   methods: {
     ...mapActions(useWorkTimeStore, ["addWorkTime"]),
+    ...mapActions(useEntryStore, ["setLastEntry", "clearLastEntry"]),
     async startEntry() {
       try {
         const requestData = {
@@ -206,6 +185,7 @@ export default {
 
         this.isActivityRunning = true;
         this.runningActivity = response.data;
+        this.setLastEntry(this.runningActivity.activity.name);
         this.elapsedTime = 0;
 
         this.elapsedTimeInterval = setInterval(() => {
@@ -230,6 +210,7 @@ export default {
 
         this.isActivityRunning = false;
         this.runningActivity = null;
+        this.clearLastEntry();
         clearInterval(this.elapsedTimeInterval);
         this.elapsedTimeInterval = null;
 
@@ -357,7 +338,6 @@ export default {
 </script>
 
 <style scoped>
-
 h2{
   margin-left: 2em;
 }
@@ -371,49 +351,49 @@ h2{
 }
 .form-container {
   flex: 1;
-  margin: 0 10px 0 10px; /* Espacement entre les deux formulaires */
+  margin: 0 10px 0 10px;
 
   align-items: center;
 }
 label,select{
-    margin-bottom: 1em;
-  }
-  input,select,option,textarea{
-    margin-bottom: 1em;
-    background-color: rgb(76, 76, 76);
-    color: white;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.5em;
-  }
+  margin-bottom: 1em;
+}
+input,select,option,textarea{
+  margin-bottom: 1em;
+  background-color: rgb(76, 76, 76);
+  color: white;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.5em;
+}
 
-  select{
-    width: 200px;
-  }
+select{
+  width: 200px;
+}
 
-  #keywordsFilter{
-    width: 200px;
+#keywordsFilter{
+  width: 200px;
 
-  }
-  form.formulaire {
-    display: flex;
-    flex-direction: column;
-    padding: 2em;
-    margin-left: auto;
-    margin-right: auto;
+}
+form.formulaire {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  margin-left: auto;
+  margin-right: auto;
 
-  }
+}
 
-  .manual{
-    padding:0.7em;
-    background-color:#5216a8 ;
-    color: white;
-    border:none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.manual{
+  padding:0.7em;
+  background-color:#5216a8 ;
+  color: white;
+  border:none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  #centrer{
-    margin-left: 2.5em;
-  }
+#centrer{
+  margin-left: 2.5em;
+}
 </style>
