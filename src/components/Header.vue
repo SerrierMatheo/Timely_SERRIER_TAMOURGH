@@ -5,6 +5,8 @@
       <RouterLink to="/Settings">Paramètres généraux</RouterLink>
       <RouterLink to="/Statistiques">Statistiques</RouterLink>
       <div>Temps totale travaillé : {{ formattedWorkTime }}</div>
+      <div v-if="lastEntry">Activité en corus : {{ lastEntry }}</div>
+      <div v-else>Aucune activité en cours</div>
       <RouterLink to="/logout"><div class="deco">Déconnexion</div></RouterLink>
     </nav>
   </header>
@@ -13,11 +15,13 @@
 <script>
 import { RouterLink } from 'vue-router';
 import { useWorkTimeStore } from "@/stores/workTimeStore.js";
+import { useEntryStore } from "@/stores/entryStore.js";
 
 export default {
   data() {
     return {
       worktime: useWorkTimeStore().workTime,
+      lastEntry: useEntryStore().lastEntry,
     };
   },
   computed: {

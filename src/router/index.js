@@ -6,7 +6,6 @@ import AuthView from "../views/AuthView.vue";
 import LogoutVue from '../components/Logout.vue'
 import StatistiquesView from "@/views/StatistiquesView.vue";
 import Home from "@/views/HomeView.vue";
-import test from "@/views/test.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

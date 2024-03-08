@@ -1,6 +1,6 @@
 <template>
   <div class="activite">
-    <h2>Activité (page d’accueil)</h2>
+    <h2>Accueil</h2>
 
     <div class="forms-container">
     <!-- Time Tracker -->
@@ -144,6 +144,7 @@
 <script>
 
 import {useWorkTimeStore} from "@/stores/workTimeStore.js";
+import {useEntryStore} from "@/stores/entryStore.js";
 import { mapActions } from "pinia";
 
 export default {
@@ -195,6 +196,7 @@ export default {
   },
   methods: {
     ...mapActions(useWorkTimeStore, ["addWorkTime"]),
+    //...mapActions(useEntryStore, ["setLastEntry", "clearLastEntry"]),
     async startEntry() {
       try {
         const requestData = {
@@ -207,12 +209,12 @@ export default {
 
         this.isActivityRunning = true;
         this.runningActivity = response.data;
+        //this.setLastEntry(this.runningActivity);
         this.elapsedTime = 0;
 
         this.elapsedTimeInterval = setInterval(() => {
           this.elapsedTime++;
-        }, 1000); // Mettez à jour toutes les 1000 ms (1 seconde)
-
+        }, 1000);
         this.$toast.success('Entrée créée avec succès');
       } catch (error) {
         this.$toast.error('Erreur lors de la création de l\'entrée');
@@ -231,6 +233,8 @@ export default {
 
         this.isActivityRunning = false;
         this.runningActivity = null;
+
+        this.clearLastEntry();
         clearInterval(this.elapsedTimeInterval);
         this.elapsedTimeInterval = null;
 
